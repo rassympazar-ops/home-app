@@ -543,3 +543,32 @@
     </script>
 </body>
 </html>
+<script>
+    // نظام مراقبة المواعيد وإطلاق التنبيه تلقائياً
+    function checkAlarms() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const currentTime = `${hours}:${minutes}`;
+        
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const currentDate = `${year}-${month}-${day}`;
+
+        // التأكد من وجود مصفوفة المواعيد في التطبيق
+        if (typeof appointments !== 'undefined' && Array.isArray(appointments)) {
+            appointments.forEach((appt, index) => {
+                if(appt.date === currentDate && appt.time === currentTime && !appt.alerted) {
+                    // ظهور رسالة تنبيه عند مطابقة الوقت بدقة
+                    alert(`⏰ تنبيه موعد هام: ${appt.title}`);
+                    // وضع علامة أن هذا الموعد تم تنبيهك به لكي لا يتكرر الإزعاج خلال نفس الدقيقة
+                    appt.alerted = true;
+                }
+            });
+        }
+    }
+
+    // فحص المواعيد كل 30 ثانية لتحديث الوقت ومقارنته
+    setInterval(checkAlarms, 30000);
+</script>
