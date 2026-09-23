@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منظومة بيت 360 الرقمية 2026</title>
+    <style>
+        :root {
+            --primary: #1e3c72;
+            --secondary: #2a5298;
+            --accent: #059669;
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-dark);
+            padding: 30px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            width: 100%;
+            max-width: 1050px;
+            padding: 35px 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(30, 60, 114, 0.15);
+            margin-bottom: 25px;
+        }
+
+        header h1 { font-size: 26px; margin-bottom: 8px; }
+        header p { opacity: 0.9; font-size: 14px; }
+
+        .stats-grid {
+            width: 100%;
+            max-width: 1050px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border-right: 5px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-card .val { font-size: 22px; font-weight: bold; color: var(--primary); }
+        .stat-card .lbl { font-size: 13px; color: var(--text-muted); }
+
+        .main-grid {
+            width: 100%;
+            max-width: 1050px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            border-top: 4px solid var(--secondary);
+        }
+
+        .card h2 {
+            font-size: 19px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 10px;
+        }
+
+        .progress-container {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 12px;
+            width: 100%;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--accent);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .expense-form, .event-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .time-select-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .input-field, select {
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background-color: #fff;
+        }
+
+        .btn-primary {
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover { background: var(--secondary); }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 2px 6px;
+        }
+
+        .total-box {
+            margin-top: 15px;
+            padding: 15px;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 10px;
+            text-align: center;
+            color: #065f46;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .history-list {
+            margin-top: 15px;
+            max-height: 160px;
+            overflow-y: auto;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 10px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            padding: 8px 0;
+            color: var(--text-dark);
+            border-bottom: 1px dashed #cbd5e1;
+        }
+
+        textarea.note-area {
+            width: 100%;
+            height: 85px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            resize: none;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        .contact-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+        }
+
+        .contact-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: block;
+            transition: all 0.2s;
+        }
+
+        .contact-btn:hover { background: var(--primary); color: white; }
+
+        .tip-box {
+            background: #fffbebfb;
+            border-right: 4px solid #f59e0b;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #b45309;
+            line-height: 1.5;
+        }
+
+        footer { margin-top: 40px; text-align: center; color: var(--text-muted); font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🏛️ منظومة بيت 360 الرقمية</h1>
+        <p>المركز الموحد لتنظيم الميزانية، المواعيد، والمهام العائلية لعام 2026</p>
+    </header>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div>
+                <div class="lbl">إجمالي المهام</div>
+                <div class="val" id="totalTasksCount">0</div>
+            </div>
+            <div style="font-size: 28px;">📋</div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="lbl">نسبة الإنجاز</div>
+                <div class="val" id="completionRate">0%</div>
+            </div>
+            <div style="font-size: 28px;">📊</div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="lbl">الميزانية المحسوبة</div>
+                <div class="val" id="statBudget">0 د.ج</div>
+            </div>
+            <div style="font-size: 28px;">💰</div>
+        </div>
+    </div>
+
+    <div class="main-grid">
+
+        <div class="card">
+            <h2>✅ قائمة المهام والمسؤوليات</h2>
+            <div class="progress-container"><div class="progress-bar" id="pBar"></div></div>
+            <div style="display:flex; gap:8px; margin-bottom:12px;">
+                <input type="text" id="taskInput" class="input-field" placeholder="أدخل مهمة جديدة..." style="flex:1;">
+                <button onclick="addTask()" class="btn-primary" style="padding:10px 15px;">إضافة</button>
+            </div>
+            <div id="tasksContainer"></div>
+        </div>
+
+        <div class="card">
+            <h2>📅 جدول المواعيد والأنشطة</h2>
+            <div class="event-form" style="margin-bottom:15px;">
+                <input type="text" id="eventTitle" class="input-field" placeholder="اسم الموعد أو النشاط">
+                
+                <div class="time-select-group">
+                    <select id="eventDay" class="input-field" style="flex: 1.5;">
+                        <option value="اليوم">اليوم</option>
+                        <option value="غداً">غداً</option>
+                        <option value="الأحد">الأحد</option>
+                        <option value="الإثنين">الإثنين</option>
+                        <option value="الثلاثاء">الثلاثاء</option>
+                        <option value="الأربعاء">الأربعاء</option>
+                        <option value="الخميس">الخميس</option>
+                        <option value="الجمعة">الجمعة</option>
+                        <option value="السبت">السبت</option>
+                    </select>
+
+                    <select id="eventHour" class="input-field" style="flex: 1;">
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                    </select>
+
+                    <select id="eventMinute" class="input-field" style="flex: 1;">
+                        <option value="00">00</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                    </select>
+                </div>
+
+                <button onclick="addEvent()" class="btn-primary">إضافة الموعد</button>
+            </div>
+            <div id="eventsContainer"></div>
+        </div>
+
+        <div class="card">
+            <h2>💵 حاسبة الميزانية وسجل المشتريات</h2>
+            <div class="expense-form">
+                <input type="text" id="expName" class="input-field" placeholder="اسم الغرض (مثال: مستلزمات)">
+                <input type="number" id="expAmount" class="input-field" placeholder="المبلغ (مثال: 1500)">
+                <button type="button" class="btn-primary" onclick="addExpense()">إضافة إلى المجموع</button>
+            </div>
+            <div class="total-box" id="totalBox">المجموع الكلي: 0 د.ج</div>
+            <div class="history-list" id="historyList"></div>
+        </div>
+
+        <div class="card">
+            <h2>📝 صندوق الملاحظات والتنبيهات</h2>
+            <textarea class="note-area" id="noteInput" placeholder="اكتب ملاحظة سريعة هنا..."></textarea>
+            <button type="button" class="btn-primary" style="width: 100%; background: #059669;" onclick="saveNote()">حفظ الملاحظة</button>
+            <p id="noteStatus" style="font-size: 12px; color: #059669; margin-top: 8px; text-align: center; font-weight: bold;"></p>
+        </div>
+
+        <div class="card">
+            <h2>📞 أرقام هامة ودليل الخدمات</h2>
+            <div class="contact-box">
+                <a href="tel:14" class="contact-btn">🚒 الحماية المدنية (14)</a>
+                <a href="tel:17" class="contact-btn">🚓 الشرطة (17)</a>
+                <a href="tel:1054" class="contact-btn">⚡ طوارئ الكهرباء</a>
+                <a href="tel:1548" class="contact-btn">📞 الرقم الأخضر</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 نصيحة التنظيم اليومي</h2>
+            <div class="tip-box">
+                <strong>📌 حكمة اليوم للتنظيم:</strong><br>
+                "التنظيم الجيد يوفر عليك نصف الوقت والمجهود. ابدأ بالمهام الأكثر أهمية أولاً."
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 بيت 360 | منظومة الإدارة الرقمية العائلية الشاملة</p>
+    </footer>
+
+    <script>
+        let tasks = JSON.parse(localStorage.getItem('my_tasks')) || [];
+        let events = JSON.parse(localStorage.getItem('my_events')) || [];
+        let expenses = JSON.parse(localStorage.getItem('my_expenses')) || [];
+
+        window.onload = function() {
+            renderTasks();
+            renderEvents();
+            renderExpenses();
+            let savedNote = localStorage.getItem('my_note');
+            if (savedNote) document.getElementById('noteInput').value = savedNote;
+        };
+
+        function renderTasks() {
+            let container = document.getElementById('tasksContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            let completedCount = 0;
+
+            if (tasks.length === 0) {
+                container.innerHTML = '<div style="font-size:12px; color:#64748b; text-align:center; padding:10px;">لا توجد مهام حالياً</div>';
+            }
+
+            tasks.forEach((task, index) => {
+                if (task.done) completedCount++;
+                let item = document.createElement('div');
+                item.style.cssText = 'display:flex; align-items:center; justify-content:space-between; padding:10px; background:#f8fafc; border-radius:10px; margin-bottom:8px; border-right:4px solid var(--secondary);';
+                item.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${index})">
+                        <span style="${task.done ? 'text-decoration:line-through; color:#64748b;' : ''}">${task.text}</span>
+                    </div>
+                    <button class="btn-delete" onclick="deleteTask(${index})">✕</button>
+                `;
+                container.appendChild(item);
+            });
+
+            document.getElementById('totalTasksCount').innerText = tasks.length;
+            let percentage = tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
+            document.getElementById('pBar').style.width = percentage + '%';
+            document.getElementById('completionRate').innerText = percentage + '%';
+        }
+
+        function addTask() {
+            let input = document.getElementById('taskInput');
+            let text = input.value.trim();
+            if (text !== '') {
+                tasks.push({ text: text, done: false });
+                input.value = '';
+                localStorage.setItem('my_tasks', JSON.stringify(tasks));
+                renderTasks();
+            }
+        }
+
+        function toggleTask(index) {
+            tasks[index].done = !tasks[index].done;
+            localStorage.setItem('my_tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            localStorage.setItem('my_tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function renderEvents() {
+            let container = document.getElementById('eventsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (events.length === 0) {
+                container.innerHTML = '<div style="font-size:12px; color:#64748b; text-align:center; padding:10px;">لا توجد مواعيد مسجلة</div>';
+            }
+
+            events.forEach((ev, index) => {
+                let item = document.createElement('div');
+                item.style.cssText = 'display:flex; align-items:center; justify-content:space-between; padding:10px; background:#f8fafc; border-radius:10px; margin-bottom:8px; border-right:4px solid var(--primary);';
+                item.innerHTML = `
+                    <div>
+                        <strong style="font-size:13px; color:#1e293b;">${ev.title}</strong>
+                        <p style="font-size:11px; color:#64748b; margin-top:2px;">⏱️ ${ev.day} - الساعة ${ev.hour}:${ev.minute}</p>
+                    </div>
+                    <button class="btn-delete" onclick="deleteEvent(${index})">✕</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function addEvent() {
+            let titleInput = document.getElementById('eventTitle');
+            let dayInput = document.getElementById('eventDay');
+            let hourInput = document.getElementById('eventHour');
+            let minuteInput = document.getElementById('eventMinute');
+
+            let title = titleInput.value.trim();
+            let day = dayInput.value;
+            let hour = hourInput.value;
+            let minute = minuteInput.value;
+
+            if (title !== '') {
+                events.push({ title: title, day: day, hour: hour, minute: minute });
+                titleInput.value = '';
+                localStorage.setItem('my_events', JSON.stringify(events));
+                renderEvents();
+            } else {
+                alert('يرجى إدخال اسم الموعد.');
+            }
+        }
+
+        function deleteEvent(index) {
+            events.splice(index, 1);
+            localStorage.setItem('my_events', JSON.stringify(events));
+            renderEvents();
+        }
+
+        function renderExpenses() {
+            let historyList = document.getElementById('historyList');
+            if (!historyList) return;
+            historyList.innerHTML = '';
+            let total = 0;
+
+            if (expenses.length === 0) {
+                historyList.innerHTML = '<div style="font-size:12px; color:#64748b; text-align:center; padding:10px;">لا توجد مشتريات مسجلة بعد</div>';
+            } else {
+                expenses.forEach((item, index) => {
+                    total += item.amount;
+                    let newItem = document.createElement('div');
+                    newItem.className = 'history-item';
+                    newItem.innerHTML = `
+                        <span>${item.name}</span>
+                        <div>
+                            <strong style="margin-left:8px;">${item.amount} د.ج</strong>
+                            <button class="btn-delete" onclick="deleteExpense(${index})">✕</button>
+                        </div>
+                    `;
+                    historyList.appendChild(newItem);
+                });
+            }
+
+            document.getElementById('totalBox').innerText = "المجموع الكلي: " + total + " د.ج";
+            document.getElementById('statBudget').innerText = total + " د.ج";
+        }
+
+        function addExpense() {
+            let nameInput = document.getElementById('expName');
+            let amountInput = document.getElementById('expAmount');
+            let name = nameInput.value.trim();
+            let amount = parseFloat(amountInput.value);
+
+            if (!isNaN(amount) && amount > 0) {
+                expenses.push({ name: name || 'منتج غير مسمى', amount: amount });
+                nameInput.value = '';
+                amountInput.value = '';
+                localStorage.setItem('my_expenses', JSON.stringify(expenses));
+                renderExpenses();
+            } else {
+                alert('يرجى كتابة المبلغ بالأرقام فقط (مثال: 1500).');
+            }
+        }
+
+        function deleteExpense(index) {
+            expenses.splice(index, 1);
+            localStorage.setItem('my_expenses', JSON.stringify(expenses));
+            renderExpenses();
+        }
+
+        function saveNote() {
+            let noteText = document.getElementById('noteInput').value.trim();
+            let statusElem = document.getElementById('noteStatus');
+            localStorage.setItem('my_note', noteText);
+            statusElem.innerText = '✓ تم حفظ الملاحظة بنجاح!';
+            setTimeout(() => statusElem.innerText = '', 3000);
+        }
+    </script>
+</body>
+</html>
